@@ -1,6 +1,7 @@
 package uploads
 
 import (
+	"errors"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
@@ -76,6 +77,10 @@ func (g *GitUpload) commitAndPush(description string) error {
 
 //Clone git clone
 func (g *GitUpload) Clone() (err error) {
+	err = g.validate()
+	if err != nil {
+		return err
+	}
 	g.repository, err = git.PlainClone(g.DirPath, false, &git.CloneOptions{
 		URL:  g.URL,
 		Auth: g.auth(),
@@ -93,20 +98,19 @@ func (g *GitUpload) Clone() (err error) {
 //filename file name
 //description git commit description
 func (g *GitUpload) UploadDir(dir, filename string, description string) error {
+	err := g.before()
+	if err != nil {
+		return err
+	}
 	z := util.NewZipUtils()
 	defer z.Close()
 	newFilename := g.getNewFilename(filename)
-	err := z.CompressDir(dir, newFilename)
+	err = z.CompressDir(dir, newFilename)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
 	}
-	err = g.add(newFilename)
-	if err != nil {
-		logger.Error("[git]", "git add file error", err.Error())
-		return err
-	}
-	return g.commitAndPush(description)
+	return g.after(newFilename, description)
 }
 
 //UploadDirs git upload compress file
@@ -114,15 +118,37 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 //filename file name
 //description git commit description
 func (g *GitUpload) UploadDirs(dirs []string, filename string, description string) error {
+	err := g.before()
+	if err != nil {
+		return err
+	}
 	z := util.NewZipUtils()
 	defer z.Close()
 	newFilename := g.getNewFilename(filename)
-	err := z.CompressDirs(dirs, newFilename)
+	err = z.CompressDirs(dirs, newFilename)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
 	}
-	err = g.add(newFilename)
+	return g.after(newFilename, description)
+
+}
+func (g *GitUpload) before() error {
+	err := g.validate()
+	if err != nil {
+		return err
+	}
+	if g.repository == nil {
+		err = g.Clone()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (g GitUpload) after(filename, description string) (err error) {
+	err = g.add(filename)
 	if err != nil {
 		logger.Error("[git]", "git add file error", err.Error())
 		return err
@@ -136,4 +162,11 @@ func (g *GitUpload) getNewFilename(filename string) string {
 		time.Now().Format("2006-01-02") +
 		string(os.PathSeparator) +
 		filename
+}
+
+func (g *GitUpload) validate() error {
+	if g.URL == "" || g.Username == "" || g.Token == "" || g.DirPath == "" {
+		return errors.New("field Required")
+	}
+	return nil
 }

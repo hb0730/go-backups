@@ -2,6 +2,9 @@ package main
 
 import (
 	"github.com/hb0730/go-backups/config"
+	"github.com/hb0730/go-backups/uploads"
+	util "github.com/hb0730/go-backups/utils"
+	"github.com/mritd/logger"
 	"github.com/robfig/cron/v3"
 )
 
@@ -48,9 +51,24 @@ type Git struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Token    string `json:"token"`
-	Dirpath  string `json:"dirpath"`
 }
 
-func upload(g Git, filename string, dir []string) {
-
+func upload(g Git, filename string, dirs []string) {
+	dirPath, err := util.GetTempDir(filename)
+	if err != nil {
+		logger.Error("[cron]", "create temporary dir error", err.Error())
+		return
+	}
+	git := uploads.NewGitUpload(
+		g.URL,
+		g.Username,
+		g.Email,
+		g.Token,
+		dirPath,
+	)
+	defer git.Close()
+	err = git.UploadDirs(dirs, filename, "auto backups")
+	if err != nil {
+		logger.Error("[cron]", "upload from git server error", err.Error())
+	}
 }
