@@ -39,7 +39,7 @@ func NewGitUpload(url, username, email, token, dirPath string) *GitUpload {
 
 //Close remove git repository
 func (g *GitUpload) Close() error {
-	return os.RemoveAll(g.DirPath)
+	return util.RemoveAll(g.DirPath)
 }
 
 func (g *GitUpload) auth() *http.BasicAuth {

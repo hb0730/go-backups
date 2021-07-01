@@ -1,2 +1,2 @@
 # go-backups
-backups 
+Compress and upload files to git server

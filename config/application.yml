@@ -1,0 +1,14 @@
+cron:
+  blog: "*/4 * * * * *"
+blog:
+  type: git
+  git:
+    url:
+    username:
+    email:
+    token:
+    dirpath:
+  uploads:
+    filename:
+    dirs:
+      - ""

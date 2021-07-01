@@ -25,8 +25,14 @@ func (z ZipUtils) Close() error {
 	return z.Zip.Close()
 }
 func (z *ZipUtils) CompressDir(srcDir string, dest string) error {
+	if !ExistExt(dest) {
+		dest += ".zip"
+	}
 	return z.Zip.Archive([]string{srcDir}, dest)
 }
 func (z ZipUtils) CompressDirs(srcDirs []string, dest string) error {
+	if !ExistExt(dest) {
+		dest += ".zip"
+	}
 	return z.Zip.Archive(srcDirs, dest)
 }
