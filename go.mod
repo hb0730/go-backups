@@ -8,6 +8,7 @@ require (
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/mholt/archiver v3.1.1+incompatible
+	github.com/mritd/logger v0.0.5
 	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect

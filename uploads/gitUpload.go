@@ -5,6 +5,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	util "github.com/hb0730/go-backups/utils"
+	"github.com/mritd/logger"
 	"os"
 	"time"
 )
@@ -67,6 +68,7 @@ func (g *GitUpload) push() error {
 func (g *GitUpload) commitAndPush(description string) error {
 	err := g.commit(description)
 	if err != nil {
+		logger.Error("[git]", "git commit error", err.Error())
 		return err
 	}
 	return g.push()
@@ -79,6 +81,7 @@ func (g *GitUpload) Clone() (err error) {
 		Auth: g.auth(),
 	})
 	if err != nil {
+		logger.Error("[git]", "git clone error", err.Error())
 		return err
 	}
 	g.worktree, err = g.repository.Worktree()
@@ -92,17 +95,15 @@ func (g *GitUpload) Clone() (err error) {
 func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 	z := util.NewZipUtils()
 	defer z.Close()
-	var newFilename = g.DirPath +
-		string(os.PathSeparator) +
-		time.Now().Format("2006-01-02") +
-		string(os.PathSeparator) +
-		filename
+	newFilename := g.getNewFilename(filename)
 	err := z.CompressDir(dir, newFilename)
 	if err != nil {
+		logger.Error("[git]", "compress files error", err.Error())
 		return err
 	}
 	err = g.add(newFilename)
 	if err != nil {
+		logger.Error("[git]", "git add file error", err.Error())
 		return err
 	}
 	return g.commitAndPush(description)
@@ -115,14 +116,24 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 func (g *GitUpload) UploadDirs(dirs []string, filename string, description string) error {
 	z := util.NewZipUtils()
 	defer z.Close()
-	var newFilename = g.DirPath + "/" + time.Now().Format("2006-01-02") + "/" + filename
+	newFilename := g.getNewFilename(filename)
 	err := z.CompressDirs(dirs, newFilename)
 	if err != nil {
+		logger.Error("[git]", "compress files error", err.Error())
 		return err
 	}
 	err = g.add(newFilename)
 	if err != nil {
+		logger.Error("[git]", "git add file error", err.Error())
 		return err
 	}
 	return g.commitAndPush(description)
+}
+
+func (g *GitUpload) getNewFilename(filename string) string {
+	return g.DirPath +
+		string(os.PathSeparator) +
+		time.Now().Format("2006-01-02") +
+		string(os.PathSeparator) +
+		filename
 }
