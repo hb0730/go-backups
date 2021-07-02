@@ -3,6 +3,7 @@ package cron
 import (
 	"errors"
 	"github.com/hb0730/go-backups/config"
+	"github.com/mritd/logger"
 	"github.com/robfig/cron/v3"
 )
 
@@ -31,6 +32,7 @@ type nameJob struct {
 
 func (j nameJob) Run() {
 	support := config.ReadYaml().String(j.name + ".type")
+	logger.Info("[cron]", "job run", "support:", support)
 	if v, ok := Supports[support]; ok {
 		//blog.git
 		//blog.aliyun-oss
