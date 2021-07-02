@@ -49,3 +49,17 @@ blog:
     dirs:
       - "file path"
 ```
+
+# Docker
+```yaml
+version: '3.8'
+services:
+  backups:
+    image: hb0730/go-backups
+    container_name: backups
+    restart: always
+    environment:
+      - FLAG="c='/app/config/application.yml'"
+    volumes:
+      - ./config=/app/config
+```
