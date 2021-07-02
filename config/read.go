@@ -10,28 +10,30 @@ var k *koanf.Koanf
 
 func ReadYaml() *koanf.Koanf {
 	if k == nil {
-		return LoadKoanf()
+		return LoadKoanf("")
 	}
 	return k
 }
-func LoadKoanf() *koanf.Koanf {
-	load()
+func LoadKoanf(config string) *koanf.Koanf {
+	load(config)
 	return k
 }
-func load() {
+func load(config string) {
 	k = koanf.New(".")
-	//err := k.Load(file.Provider("./config/application.yml"), yaml.Parser())
-	//err = k.Load(file.Provider("../config/application.yml"), yaml.Parser())
-	//err = k.Load(file.Provider("/config/application.yml"), yaml.Parser())
-	//err = k.Load(file.Provider("config/application.yml"), yaml.Parser())
-	//err = k.Load(file.Provider("application.yml"), yaml.Parser())
-	//if err != nil {
-	//	panic(err)
-	//}
+	if config == "" {
+		defaultConfig()
+	} else {
+		err := k.Load(file.Provider(config), yaml.Parser())
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func defaultConfig() {
 	_ = k.Load(file.Provider("./config/application.yml"), yaml.Parser())
 	_ = k.Load(file.Provider("../config/application.yml"), yaml.Parser())
 	_ = k.Load(file.Provider("/config/application.yml"), yaml.Parser())
 	_ = k.Load(file.Provider("config/application.yml"), yaml.Parser())
 	_ = k.Load(file.Provider("application.yml"), yaml.Parser())
-
 }
