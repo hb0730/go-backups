@@ -1,5 +1,8 @@
-FROM ubuntu
-RUN apt-get update && apt install tree
+FROM scratch
 WORKDIR /app
-COPY ./* .
-RUN tree
+RUN mkdir ./config
+ENV FLAG=""
+COPY ./go-backups .
+COPY ./config/*.yaml ./config
+RUN  ls
+ENTRYPOINT /app/go-backups ${FLAG}
