@@ -1,6 +1,6 @@
 cron:
   blog: "*/4 * * * * *"
-  test: "0 0 24 * * *"
+  test: "0 0 0 * * *"
 blog:
   type: git
   git:
