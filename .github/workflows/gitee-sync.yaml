@@ -1,0 +1,22 @@
+name: Gitee Repos Mirror Periodic Job
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror the Github organization repos to Gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/hb0730
+          dst: gitee/hb0730
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          white_list: 'go-backups'
+          static_list: 'go-backups'
+          force_update: true
