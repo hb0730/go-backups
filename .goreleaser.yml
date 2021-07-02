@@ -28,7 +28,7 @@ dockers:
       - "hb0730/go-backups:{{.Tag}}"
     skip_push: false
     dockerfile: ./docker/Dockerfile
-    use_buildx: true
+    use_buildx: flase
     extra_files:
       - config
 
