@@ -1,6 +1,8 @@
-package main
+package cron
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestStartCron(t *testing.T) {
 	StartCron()

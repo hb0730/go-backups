@@ -84,7 +84,7 @@ func (ali *AliyunOss) before() error {
 	}
 	return nil
 }
-func (ali AliyunOss) after(filename, localFile string) error {
+func (ali *AliyunOss) after(filename, localFile string) error {
 	return ali.bucket.PutObjectFromFile(ali.getUploadFilenameWithPath(filename), localFile)
 }
 
@@ -101,6 +101,6 @@ func (ali *AliyunOss) getTempFile(filename string) (string, error) {
 	}
 	return tempDir + string(os.PathSeparator) + filename, nil
 }
-func (ali AliyunOss) getUploadFilenameWithPath(filename string) string {
+func (ali *AliyunOss) getUploadFilenameWithPath(filename string) string {
 	return time.Now().Format("2006-01-02") + "/" + filename
 }
