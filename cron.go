@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/hb0730/go-backups/config"
 	"github.com/hb0730/go-backups/uploads"
 	util "github.com/hb0730/go-backups/utils"
@@ -12,6 +13,9 @@ func StartCron() error {
 	c := cron.New(cron.WithSeconds())
 	yaml := config.ReadYaml()
 	r := yaml.StringMap("cron")
+	if len(r) == 0 {
+		return errors.New("cron size is 0")
+	}
 	for k, v := range r {
 		job := nameJob{name: k}
 		_, err := c.AddJob(v, job)

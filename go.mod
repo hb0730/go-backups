@@ -3,6 +3,7 @@ module github.com/hb0730/go-backups
 go 1.16
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.1.8+incompatible // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/frankban/quicktest v1.13.0 // indirect
 	github.com/go-git/go-git/v5 v5.4.2

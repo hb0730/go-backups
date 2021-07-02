@@ -24,12 +24,20 @@ func NewZipUtils() *ZipUtils {
 func (z ZipUtils) Close() error {
 	return z.Zip.Close()
 }
+
+//CompressDir compress dir
+//srcDir Target directory
+//dest File with path
 func (z *ZipUtils) CompressDir(srcDir string, dest string) error {
 	if !ExistExt(dest) {
 		dest += ".zip"
 	}
 	return z.Zip.Archive([]string{srcDir}, dest)
 }
+
+//CompressDirs compress dirs
+//srcDirs Target directory
+//dest File with path
 func (z ZipUtils) CompressDirs(srcDirs []string, dest string) error {
 	if !ExistExt(dest) {
 		dest += ".zip"

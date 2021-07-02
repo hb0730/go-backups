@@ -95,7 +95,7 @@ func (g *GitUpload) Clone() (err error) {
 
 //UploadDir git upload compress file
 //dir compress dir
-//filename file name
+//filename File with name only
 //description git commit description
 func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 	err := g.before()
@@ -115,7 +115,7 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 
 //UploadDirs git upload compress file
 //dir compress dir
-//filename file name
+//filename File with name only
 //description git commit description
 func (g *GitUpload) UploadDirs(dirs []string, filename string, description string) error {
 	err := g.before()
@@ -147,7 +147,7 @@ func (g *GitUpload) before() error {
 	return nil
 }
 
-func (g GitUpload) after(filename, description string) (err error) {
+func (g *GitUpload) after(filename, description string) (err error) {
 	err = g.add(filename)
 	if err != nil {
 		logger.Error("[git]", "git add file error", err.Error())

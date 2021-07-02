@@ -3,6 +3,7 @@ package util
 import (
 	"os"
 	"path"
+	"strings"
 )
 
 //GetTempDir temporary  Dir
@@ -24,4 +25,16 @@ func ExistExt(filename string) bool {
 	} else {
 		return true
 	}
+}
+
+//GetFilenameNoWithExtension get file name no with extension
+func GetFilenameNoWithExtension(filepath string) string {
+	filename := path.Base(filepath)
+	ext := path.Ext(filename)
+	return strings.TrimSuffix(filename, ext)
+}
+
+//GetFilenameWithExtension get filename with extension
+func GetFilenameWithExtension(filepath string) string {
+	return path.Base(filepath)
 }
