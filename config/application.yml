@@ -8,7 +8,6 @@ blog:
     username:
     email:
     token:
-    dirpath:
   uploads:
     filename:
     dirs:

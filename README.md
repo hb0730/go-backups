@@ -1,6 +1,6 @@
 # go-backups
 
-Compress and upload files to git server
+Compress and upload files to backup server
 
 # command
 
@@ -20,7 +20,6 @@ blog:
     username:
     email:
     token:
-    dirpath:
   uploads:
     # no with extension
     filename: "test"
