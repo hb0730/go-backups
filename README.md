@@ -6,49 +6,32 @@ Compress and upload files to backup server
 
 `go-backups -c="config file"`
 
-## upload config
-
-### git
+# application.yml
 
 ```yaml
 cron:
-  blog: "0 0 24 * * *"
+  # upload name
+  blog: "0 0 0 * * *"
+# upload name
 blog:
-  type: git
+  # upload server with type [git|aliyun-oss......]
+  type:
+  #upload server with type  
+  # You can see under the cron  package
   git:
-    compress: zip
+    # file compress type [zip|tar|tar.gz]
+    # you  see then compress file
+    compress: zip|tar|tar.gz
     url:
     username:
     email:
     token:
   uploads:
-    # no with extension
-    filename: "test"
+    # compress file name with not extension
+    filename: test
     dirs:
-      - "file path"
-
-```
-
-### oss
-
-#### aliyun
-
-```yaml
-cron:
-  blog: "0 0 24 * * *"
-blog:
-  type: aliyun-oss
-  aliyun-oss:
-    compress: zip
-    endpoint:
-    accessKeyId:
-    accessKeySecret:
-    bucketName:
-  uploads:
-    # no with extension
-    filename: "test"
-    dirs:
-      - "file path"
+      #  compression Directory path
+      - ""
 ```
 
 # Docker

@@ -1,6 +1,5 @@
 cron:
   blog: "*/4 * * * * *"
-  test: "0 0 0 * * *"
 blog:
   type: git
   git:
@@ -13,16 +12,3 @@ blog:
     filename:
     dirs:
       - ""
-test:
-  type: aliyun-oss
-  aliyun-oss:
-    compress: tar.gz
-    endpoint:
-    accessKeyId:
-    accessKeySecret:
-    bucketName:
-  uploads:
-    # no with extension
-    filename: "test"
-    dirs:
-      - "file path"
