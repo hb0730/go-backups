@@ -4,7 +4,7 @@ RUN mkdir config
 ENV FLAG=""
 COPY go-backups .
 RUN  ls -al
-COPY config/*.yaml ./config
+COPY config config
 RUN cd config
 RUN ls -al
 ENTRYPOINT /app/go-backups ${FLAG}
