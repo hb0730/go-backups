@@ -1,6 +1,5 @@
-FROM scratch
+FROM ubuntu
+RUN apt install tree
 WORKDIR /app
-ENV FLAG=""
-COPY ../go-backups .
-COPY ../config .
-ENTRYPOINT /app/go-backups ${FLAG}
+COPY ./* .
+RUN tree
