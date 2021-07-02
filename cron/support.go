@@ -1,6 +1,6 @@
 package cron
 
-var Supports map[string]Support
+var Supports = make(map[string]Support)
 
 type Support interface {
 	//Upload

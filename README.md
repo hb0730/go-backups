@@ -36,9 +36,9 @@ blog:
   type: aliyun-oss
   aliyun-oss:
     endpoint:
-    access_key_id:
-    access_key_secret:
-    bucket_name:
+    accessKeyId:
+    accessKeySecret:
+    bucketName:
   uploads:
     # no with extension
     filename: "test"

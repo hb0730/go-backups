@@ -7,9 +7,9 @@ import (
 
 type AliYunOss struct {
 	Endpoint        string `json:"endpoint"`
-	AccessKeyId     string `json:"access_key_id"`
-	AccessKeySecret string `json:"access_key_secret"`
-	BucketName      string `json:"bucket_name"`
+	AccessKeyId     string `json:"accessKeyId"`
+	AccessKeySecret string `json:"accessKeySecret"`
+	BucketName      string `json:"bucketName"`
 }
 
 func (ali *AliYunOss) Upload(name, supportKey string) error {
@@ -18,7 +18,7 @@ func (ali *AliYunOss) Upload(name, supportKey string) error {
 		return err
 	}
 
-	return nil
+	return ali.UploadFromAliYunOss(name)
 }
 func (ali *AliYunOss) UploadFromAliYunOss(name string) error {
 	oss, err := uploads.NewAliyunOss(ali.Endpoint, ali.AccessKeyId, ali.AccessKeySecret, ali.BucketName)

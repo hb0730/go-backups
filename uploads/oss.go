@@ -35,6 +35,9 @@ func (ali *AliyunOss) Client() (err error) {
 }
 
 func (ali *AliyunOss) UploadDir(dir, filename, _ string) error {
+	if dir == "" || filename == "" {
+		return nil
+	}
 	err := ali.before()
 	if err != nil {
 		return err
@@ -53,6 +56,9 @@ func (ali *AliyunOss) UploadDir(dir, filename, _ string) error {
 }
 
 func (ali *AliyunOss) UploadDirs(dirs []string, filename, _ string) error {
+	if len(dirs) == 0 || filename == "" {
+		return nil
+	}
 	err := ali.before()
 	if err != nil {
 		return err

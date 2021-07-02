@@ -98,6 +98,9 @@ func (g *GitUpload) Clone() (err error) {
 //filename File with name only
 //description git commit description
 func (g *GitUpload) UploadDir(dir, filename string, description string) error {
+	if dir == "" || filename == "" {
+		return nil
+	}
 	err := g.before()
 	if err != nil {
 		return err
@@ -118,6 +121,9 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 //filename File with name only
 //description git commit description
 func (g *GitUpload) UploadDirs(dirs []string, filename string, description string) error {
+	if len(dirs) == 0 || filename == "" {
+		return nil
+	}
 	err := g.before()
 	if err != nil {
 		return err
