@@ -13,6 +13,7 @@ import (
 
 //GitUpload git upload
 type GitUpload struct {
+	BaseUpload
 	//URL git url
 	URL string
 	//Username username
@@ -28,13 +29,14 @@ type GitUpload struct {
 }
 
 //NewGitUpload new GitUpload
-func NewGitUpload(url, username, email, token, dirPath string) *GitUpload {
+func NewGitUpload(url, username, email, token, dirPath, compress string) *GitUpload {
 	g := new(GitUpload)
 	g.URL = url
 	g.Username = username
 	g.Email = email
 	g.Token = token
 	g.DirPath = dirPath
+	g.CompressType = compress
 	return g
 }
 
@@ -101,14 +103,13 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 	if dir == "" || filename == "" {
 		return nil
 	}
-	err := g.before()
+	compress, err := g.before()
 	if err != nil {
 		return err
 	}
-	z := util.NewZipUtils()
-	defer z.Close()
+	defer compress.Close()
 	newFilename := g.getNewFilename(filename)
-	err = z.CompressDir(dir, newFilename)
+	err = compress.CompressDir(newFilename, dir)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
@@ -124,14 +125,13 @@ func (g *GitUpload) UploadDirs(dirs []string, filename string, description strin
 	if len(dirs) == 0 || filename == "" {
 		return nil
 	}
-	err := g.before()
+	compress, err := g.before()
 	if err != nil {
 		return err
 	}
-	z := util.NewZipUtils()
-	defer z.Close()
+	defer compress.Close()
 	newFilename := g.getNewFilename(filename)
-	err = z.CompressDirs(dirs, newFilename)
+	err = compress.CompressDirs(newFilename, dirs)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
@@ -139,18 +139,18 @@ func (g *GitUpload) UploadDirs(dirs []string, filename string, description strin
 	return g.after(newFilename, description)
 
 }
-func (g *GitUpload) before() error {
+func (g *GitUpload) before() (util.Compress, error) {
 	err := g.validate()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if g.repository == nil {
 		err = g.Clone()
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
-	return nil
+	return g.GetCompress()
 }
 
 func (g *GitUpload) after(filename, description string) (err error) {

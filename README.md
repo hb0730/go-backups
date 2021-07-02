@@ -16,6 +16,7 @@ cron:
 blog:
   type: git
   git:
+    compress: zip
     url:
     username:
     email:
@@ -38,6 +39,7 @@ cron:
 blog:
   type: aliyun-oss
   aliyun-oss:
+    compress: zip
     endpoint:
     accessKeyId:
     accessKeySecret:
@@ -50,6 +52,7 @@ blog:
 ```
 
 # Docker
+
 ```yaml
 version: '3.8'
 services:

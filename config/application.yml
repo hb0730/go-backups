@@ -4,6 +4,7 @@ cron:
 blog:
   type: git
   git:
+    compress: zip
     url:
     username:
     email:
@@ -15,6 +16,7 @@ blog:
 test:
   type: aliyun-oss
   aliyun-oss:
+    compress: tar.gz
     endpoint:
     accessKeyId:
     accessKeySecret:

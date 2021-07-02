@@ -9,6 +9,7 @@ import (
 )
 
 type AliyunOss struct {
+	BaseUpload
 	Endpoint        string
 	AccessKeyId     string
 	AccessKeySecret string
@@ -16,16 +17,21 @@ type AliyunOss struct {
 	bucket          *oss.Bucket
 }
 
-func NewAliyunOss(endpoint, accessKeyId, accessKeySecret, bucketName string) (*AliyunOss, error) {
+func NewAliyunOss(endpoint, accessKeyId, accessKeySecret, bucketName, compress string) (*AliyunOss, error) {
 	ali := new(AliyunOss)
 	ali.Endpoint = endpoint
 	ali.AccessKeyId = accessKeyId
 	ali.AccessKeySecret = accessKeySecret
 	ali.BucketName = bucketName
+	ali.CompressType = compress
 	return ali, ali.Client()
 }
 
 func (ali *AliyunOss) Client() (err error) {
+	err = ali.validate()
+	if err != nil {
+		return err
+	}
 	aliClient, err := oss.New(ali.Endpoint, ali.AccessKeyId, ali.AccessKeySecret)
 	if err != nil {
 		return err
@@ -38,17 +44,17 @@ func (ali *AliyunOss) UploadDir(dir, filename, _ string) error {
 	if dir == "" || filename == "" {
 		return nil
 	}
-	err := ali.before()
+	compress, err := ali.before()
 	if err != nil {
 		return err
 	}
-	z := util.NewZipUtils()
-	defer z.Close()
+
+	defer compress.Close()
 	newFilename, err := ali.getTempFile(filename)
 	if err != nil {
 		return err
 	}
-	err = z.CompressDir(dir, newFilename)
+	err = compress.CompressDir(newFilename, dir)
 	if err != nil {
 		return err
 	}
@@ -59,36 +65,35 @@ func (ali *AliyunOss) UploadDirs(dirs []string, filename, _ string) error {
 	if len(dirs) == 0 || filename == "" {
 		return nil
 	}
-	err := ali.before()
+	compress, err := ali.before()
 	if err != nil {
 		return err
 	}
-	z := util.NewZipUtils()
-	defer z.Close()
+	defer compress.Close()
 	//得到的是临时文件(存在文件路径)
 	localFile, err := ali.getTempFile(filename)
 	if err != nil {
 		return err
 	}
-	err = z.CompressDirs(dirs, localFile)
+	err = compress.CompressDirs(localFile, dirs)
 	if err != nil {
 		return err
 	}
 	return ali.after(util.GetFilenameWithExtension(localFile), localFile)
 
 }
-func (ali *AliyunOss) before() error {
+func (ali *AliyunOss) before() (util.Compress, error) {
 	err := ali.validate()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if ali.bucket == nil {
 		err = ali.Client()
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
-	return nil
+	return ali.GetCompress()
 }
 func (ali *AliyunOss) after(filename, localFile string) error {
 	return ali.bucket.PutObjectFromFile(ali.getUploadFilenameWithPath(filename), localFile)
