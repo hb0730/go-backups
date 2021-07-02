@@ -5,6 +5,5 @@ ENV FLAG=""
 COPY go-backups .
 RUN  ls -al
 COPY config config
-RUN cd config
-RUN ls -al
+RUN cd config && ls -al
 ENTRYPOINT /app/go-backups ${FLAG}
