@@ -30,7 +30,7 @@ dockers:
     dockerfile: ./docker/Dockerfile
     #    use_buildx: flase
     extra_files:
-      - config
+      - config/application.yml
 
 archives:
   - id: tar

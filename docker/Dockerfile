@@ -1,9 +1,7 @@
-FROM alpine
+FROM scratch
+WORKDIR /app/config
 WORKDIR /app
-RUN mkdir config
 ENV FLAG=""
 COPY go-backups .
-RUN  ls -al
-COPY config config
-RUN cd config && ls -al
+COPY config/application.yml ./config/
 ENTRYPOINT /app/go-backups ${FLAG}
