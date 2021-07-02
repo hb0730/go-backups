@@ -2,6 +2,10 @@
 
 Compress and upload files to git server
 
+# command
+
+`go-backups -c="config file"`
+
 ## upload config
 
 ### git
