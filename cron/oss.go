@@ -1,7 +1,6 @@
 package cron
 
 import (
-	"github.com/hb0730/go-backups/config"
 	"github.com/hb0730/go-backups/uploads"
 )
 
@@ -25,11 +24,32 @@ func (ali *AliYunOss) UploadFromAliYunOss(name string) error {
 	if err != nil {
 		return err
 	}
-	filename := config.ReadYaml().String(name + ".uploads.filename")
-	dirs := config.ReadYaml().Strings(name + ".uploads.dirs")
-	return oss.UploadDirs(dirs, filename, "")
+	ali.upload = oss
+	return ali.Uploads(name)
+}
+
+type QiniuOss struct {
+	Base      `mapstructure:",squash"`
+	AccessKey string `json:"accessKey"`
+	SecretKey string `json:"secretKey"`
+	Bucket    string `json:"bucket"`
+	RegionId  string `json:"regionId"`
+}
+
+func (q *QiniuOss) Upload(name, supportKey string) error {
+	err := q.Unmarshal(name, supportKey, q)
+	if err != nil {
+		return err
+	}
+	oss, err := uploads.NewQiniuOss(q.AccessKey, q.SecretKey, q.Bucket, q.RegionId, q.Compress)
+	if err != nil {
+		return err
+	}
+	q.upload = oss
+	return q.Uploads(name)
 }
 
 func init() {
 	Supports["aliyun-oss"] = &AliYunOss{}
+	Supports["qiniu-oss"] = &QiniuOss{}
 }

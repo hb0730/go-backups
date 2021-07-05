@@ -1,10 +1,22 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
+	"time"
 )
+
+//GetTempDirFile tempdir/filename
+func GetTempDirFile(pattern, filename string) (string, error) {
+	dir, err := GetTempDir(pattern)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s%s%s", dir, string(os.PathSeparator), filename), nil
+}
 
 //GetTempDir temporary  Dir
 func GetTempDir(pattern string) (string, error) {
@@ -28,13 +40,18 @@ func ExistExt(filename string) bool {
 }
 
 //GetFilenameNoWithExtension get file name no with extension
-func GetFilenameNoWithExtension(filepath string) string {
-	filename := path.Base(filepath)
-	ext := path.Ext(filename)
-	return strings.TrimSuffix(filename, ext)
+func GetFilenameNoWithExtension(filename string) string {
+	newFilename := filepath.Base(filename)
+	ext := filepath.Ext(filename)
+	return strings.TrimSuffix(newFilename, ext)
 }
 
 //GetFilenameWithExtension get filename with extension
-func GetFilenameWithExtension(filepath string) string {
-	return path.Base(filepath)
+func GetFilenameWithExtension(filename string) string {
+	return filepath.Base(filename)
+}
+
+//UploadFilenameWithDir upload dir and filename  y-m-d/filename
+func UploadFilenameWithDir(filename string) string {
+	return time.Now().Format("2006-01-02") + "/" + GetFilenameWithExtension(filename)
 }

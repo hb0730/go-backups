@@ -13,7 +13,7 @@ var (
 func TestZipUtil_CompressDir(t *testing.T) {
 	zip := NewZipUtilDefault()
 	defer zip.Close()
-	err := zip.CompressDir(dest, src...)
+	err := zip.CompressDir(&dest, src...)
 	if err != nil {
 		panic(err)
 	}

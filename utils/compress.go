@@ -14,8 +14,10 @@ const (
 )
 
 type Compress interface {
-	CompressDir(dst string, src ...string) error
-	CompressDirs(dest string, src []string) error
+	//CompressDir compress dirs
+	CompressDir(dst *string, src ...string) error
+	//CompressDirs compress dirs
+	CompressDirs(dest *string, src []string) error
 	Close() error
 }
 
@@ -39,13 +41,13 @@ func NewZipUtilDefault() *ZipUtil {
 	return NewZipUtil(flate.DefaultCompression)
 }
 
-func (zip *ZipUtil) CompressDir(dest string, src ...string) error {
-	dest = withExtension(dest, ZIP)
-	return zip.Zip.Archive(src, dest)
+func (zip *ZipUtil) CompressDir(dest *string, src ...string) error {
+	*dest = withExtension(*dest, ZIP)
+	return zip.Zip.Archive(src, *dest)
 }
-func (zip ZipUtil) CompressDirs(dest string, src []string) error {
-	dest = withExtension(dest, ZIP)
-	return zip.Zip.Archive(src, dest)
+func (zip ZipUtil) CompressDirs(dest *string, src []string) error {
+	*dest = withExtension(*dest, ZIP)
+	return zip.Zip.Archive(src, *dest)
 }
 
 func (zip *ZipUtil) Close() error {
@@ -67,13 +69,13 @@ func NewTarUtil() *TarUtil {
 	return t
 }
 
-func (tar *TarUtil) CompressDir(dest string, src ...string) error {
-	dest = withExtension(dest, TAR)
-	return tar.Tar.Archive(src, dest)
+func (tar *TarUtil) CompressDir(dest *string, src ...string) error {
+	*dest = withExtension(*dest, TAR)
+	return tar.Tar.Archive(src, *dest)
 }
-func (tar *TarUtil) CompressDirs(dest string, src []string) error {
-	dest = withExtension(dest, TAR)
-	return tar.Tar.Archive(src, dest)
+func (tar *TarUtil) CompressDirs(dest *string, src []string) error {
+	*dest = withExtension(*dest, TAR)
+	return tar.Tar.Archive(src, *dest)
 }
 func (tar *TarUtil) Close() error {
 	return tar.Tar.Close()
@@ -99,13 +101,13 @@ func NewTarGzUtilDefault() *TarGzUtil {
 	return NewTarGzUtil(flate.DefaultCompression)
 }
 
-func (gz *TarGzUtil) CompressDir(dest string, src ...string) error {
-	dest = withExtension(dest, TAR_GZ)
-	return gz.GZ.Archive(src, dest)
+func (gz *TarGzUtil) CompressDir(dest *string, src ...string) error {
+	*dest = withExtension(*dest, TAR_GZ)
+	return gz.GZ.Archive(src, *dest)
 }
-func (gz *TarGzUtil) CompressDirs(dest string, src []string) error {
-	dest = withExtension(dest, TAR_GZ)
-	return gz.GZ.Archive(src, dest)
+func (gz *TarGzUtil) CompressDirs(dest *string, src []string) error {
+	*dest = withExtension(*dest, TAR_GZ)
+	return gz.GZ.Archive(src, *dest)
 }
 func (gz *TarGzUtil) Close() error {
 	return gz.GZ.Close()

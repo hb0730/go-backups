@@ -109,7 +109,7 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 	}
 	defer compress.Close()
 	newFilename := g.getNewFilename(filename)
-	err = compress.CompressDir(newFilename, dir)
+	err = compress.CompressDir(&newFilename, dir)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
@@ -131,7 +131,7 @@ func (g *GitUpload) UploadDirs(dirs []string, filename string, description strin
 	}
 	defer compress.Close()
 	newFilename := g.getNewFilename(filename)
-	err = compress.CompressDirs(newFilename, dirs)
+	err = compress.CompressDirs(&newFilename, dirs)
 	if err != nil {
 		logger.Error("[git]", "compress files error", err.Error())
 		return err
