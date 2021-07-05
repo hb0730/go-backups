@@ -71,7 +71,7 @@ func (g *GitUpload) push() error {
 func (g *GitUpload) commitAndPush(description string) error {
 	err := g.commit(description)
 	if err != nil {
-		logger.Error("[git]", "git commit error", err.Error())
+		logger.Error("[git] ", "git commit error ", err.Error())
 		return err
 	}
 	return g.push()
@@ -88,7 +88,7 @@ func (g *GitUpload) Clone() (err error) {
 		Auth: g.auth(),
 	})
 	if err != nil {
-		logger.Error("[git]", "git clone error", err.Error())
+		logger.Error("[git] ", "git clone error ", err.Error())
 		return err
 	}
 	g.worktree, err = g.repository.Worktree()
@@ -111,7 +111,7 @@ func (g *GitUpload) UploadDir(dir, filename string, description string) error {
 	newFilename := g.getNewFilename(filename)
 	err = compress.CompressDir(&newFilename, dir)
 	if err != nil {
-		logger.Error("[git]", "compress files error", err.Error())
+		logger.Error("[git] ", "compress files error ", err.Error())
 		return err
 	}
 	return g.after(newFilename, description)
@@ -133,7 +133,7 @@ func (g *GitUpload) UploadDirs(dirs []string, filename string, description strin
 	newFilename := g.getNewFilename(filename)
 	err = compress.CompressDirs(&newFilename, dirs)
 	if err != nil {
-		logger.Error("[git]", "compress files error", err.Error())
+		logger.Error("[git] ", "compress files error ", err.Error())
 		return err
 	}
 	return g.after(newFilename, description)
@@ -156,7 +156,7 @@ func (g *GitUpload) before() (util.Compress, error) {
 func (g *GitUpload) after(filename, description string) (err error) {
 	err = g.add(filename)
 	if err != nil {
-		logger.Error("[git]", "git add file error", err.Error())
+		logger.Error("[git] ", "git add file error ", err.Error())
 		return err
 	}
 	return g.commitAndPush(description)

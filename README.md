@@ -44,7 +44,13 @@ services:
     container_name: backups
     restart: always
     environment:
-      - FLAG="c='/app/config/application.yml'"
+      - FLAG="-c='/app/config/application.yml'"
     volumes:
       - ./config=/app/config
 ```
+
+# Support
+
+* git server
+* [aliyun-oss](https://www.aliyun.com/product/oss)
+* [qiniu-oss](https://www.qiniu.com/products/kodo)

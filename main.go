@@ -13,8 +13,8 @@ func init() {
 	flag.StringVar(&configfile, "c", "", "read config file")
 }
 func main() {
-	logger.Info("[main]", "start success", "properties config:", configfile)
 	flag.Parse()
+	logger.Info("[main] ", "start success ", "properties config: ", configfile)
 	config.LoadKoanf(configfile)
 	err := cron.StartCron()
 	panic(err)
