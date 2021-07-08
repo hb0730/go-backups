@@ -9,29 +9,62 @@ Compress and upload files to backup server
 # application.yml
 
 ```yaml
+# cron
 cron:
-  # upload name
-  blog: "0 0 0 * * *"
+  # upload name and Crone expression
+  # see github.com/robfig/cron
+  blog: "*/4 * * * * *"
 # upload name
 blog:
-  # upload server with type [git|aliyun-oss......]
-  type:
-  #upload server with type  
-  # You can see under the cron  package
+  # type of upload server [git|aliyun-oss|qiniu-oss...]
+  type: git
+  # type of upload server
   git:
-    # file compress type [zip|tar|tar.gz]
-    # you  see then compress file
-    compress: zip|tar|tar.gz
+    # compress type [zip|tar...]
+    compress: zip
     url:
     username:
     email:
     token:
+  # uploads
   uploads:
-    # compress file name with not extension
-    filename: test
+    # compress name with not extension
+    filename:
+    # compression directory path
     dirs:
-      #  compression Directory path
       - ""
+```
+
+## compress type
+
+### git
+
+```yaml
+compress:
+url:
+username:
+email:
+token:
+```
+
+### aliyun-oss
+
+```yaml
+compress:
+endpoint:
+accessKeyId:
+accessKeySecret:
+bucketName:
+```
+
+### qiniu-oss
+
+```yaml
+compress:
+accessKey:
+secretKey:
+bucket:
+regionId:
 ```
 
 # Docker
