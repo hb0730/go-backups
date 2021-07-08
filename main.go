@@ -17,5 +17,7 @@ func main() {
 	logger.Info("[main] ", "start success ", "properties config: ", configfile)
 	config.LoadKoanf(configfile)
 	err := cron.StartCron()
-	panic(err)
+	if err != nil {
+		panic(err)
+	}
 }

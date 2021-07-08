@@ -5,6 +5,6 @@ services:
     container_name: backups
     restart: always
     environment:
-      - FLAG="c='/app/config/application.yml'"
+      - FLAG="-c='/app/config/application.yml'"
     volumes:
       - ./config=/app/config
