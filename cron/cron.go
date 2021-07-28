@@ -38,7 +38,7 @@ func (j nameJob) Run() {
 		//blog.aliyun-oss
 		err := v.Upload(j.name, support)
 		if err != nil {
-			panic(err)
+			logger.Errorf("upload support error: %s", err.Error())
 		}
 	}
 }
