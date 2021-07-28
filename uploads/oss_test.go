@@ -6,10 +6,10 @@ import (
 
 const (
 	endpoint        = ""
-	bucketName      = "vback"
-	accessKeyId     = "1HAzkkzUqhj2XZQ5-ivsk_Vo53Tw-bHz5WikULVL"
-	accessKeySecret = "ie_U79nV07VzTZuDKq-cIphPzyNGpYmfWKD5_k37"
-	regionId        = "z0"
+	bucketName      = ""
+	accessKeyId     = ""
+	accessKeySecret = ""
+	regionId        = ""
 )
 
 func TestAliyunOss_UploadDir(t *testing.T) {
